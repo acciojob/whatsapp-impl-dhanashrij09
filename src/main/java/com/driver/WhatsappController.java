@@ -30,7 +30,6 @@ public class WhatsappController {
         return whatsappService.createUser(name, mobile);
     }
 
-    @PostMapping("/add-group")
     public Group createGroup(List<User> users){
         // The list contains at least 2 users where the first user is the admin. A group has exactly one admin.
         // If there are only 2 users, the group is a personal chat and the group name should be kept as the name of the second user(other than admin)
@@ -64,7 +63,7 @@ public class WhatsappController {
     public String changeAdmin(User approver, User user, Group group) throws Exception{
         //Throw "Group does not exist" if the mentioned group does not exist
         //Throw "Approver does not have rights" if the approver is not the current admin of the group
-        //Throw "User is not a participant" if the user is not a part of the group
+        //Throw "Approver does not have rights" if the user is not a part of the group
         //Change the admin of the group to "user" and return "SUCCESS". Note that at one time there is only one admin and the admin rights are transferred from approver to user.
 
         return whatsappService.changeAdmin(approver, user, group);
