@@ -3,7 +3,7 @@ package com.driver;
 public class User {
     private String name;
     private String mobile;
-    private Group group;
+   // private Group group;
 
     public User(String name, String mobile) {
         this.name = name;
@@ -26,7 +26,5 @@ public class User {
         this.mobile = mobile;
     }
 
-    public Group getGroup(){
-        return group;
-    }
+
 }

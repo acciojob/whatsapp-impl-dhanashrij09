@@ -4,7 +4,7 @@ public class Group {
     private String name;
     private static int numberOfParticipants;
 
-    public Group(String name) {
+    public Group(String name,int numberOfParticipants) {
         this.name = name;
         this.numberOfParticipants = numberOfParticipants;
     }

@@ -27,7 +27,7 @@ public class WhatsappRepository {
         this.messageId = 0;
     }
 
-    public static String createUser(String name, String mobile)  throws Exception{
+    public static String createUser(String name, String mobile) throws Exception {
         //User newUser = new User(name, mobile);
         if (userMobile.contains(mobile)) {
             throw new IllegalArgumentException("User already exists");
@@ -38,7 +38,7 @@ public class WhatsappRepository {
         return "SUCCESS";
     }
 
-    public static Group createGroup(List<User> users){
+    public static Group createGroup(List<User> users) {
         if (users.size() < 2) {
             throw new IllegalArgumentException("A group should have at least 2 users.");
         }
@@ -53,7 +53,7 @@ public class WhatsappRepository {
         } else {
             groupName = "Group " + customGroupCount;
         }
-        Group group = new Group(groupName);
+        Group group = new Group(groupName,Group.getNumberOfParticipants());
         groupUserMap.put(group, users);
         groupMessageMap.put(group, new ArrayList<>());
         adminMap.put(group, admin);
@@ -61,16 +61,14 @@ public class WhatsappRepository {
         return group;
     }
 
-    public static int createMessage(String content){
-       //Message message = new Message(content);
-      // return messageId++;
+    public static int createMessage(String content) {
         messageId++;
         Message message = new Message(messageId, content, new Date());
         senderMap.put(message, null);
         return messageId;
     }
 
-    public static int sendMessage(Message message, User sender, Group group)  throws Exception{
+    public static int sendMessage(Message message, User sender, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
             throw new IllegalArgumentException("Group does not exist.");
         }
@@ -84,7 +82,7 @@ public class WhatsappRepository {
         return messageList.size();
     }
 
-    public static String changeAdmin(User approver, User user, Group group) throws Exception{
+    public static String changeAdmin(User approver, User user, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
             throw new IllegalArgumentException("Group does not exist.");
         }
@@ -99,55 +97,51 @@ public class WhatsappRepository {
         return "SUCCESS";
     }
 
-    public static int removeUser(User user) throws Exception{
-        if (user.getName()==null){
+
+    public static int removeUser(User user) throws Exception {
+        if (user.getName() == null) {
             throw new IllegalArgumentException("User not found");
         }
-        Group group = user.getGroup();
-        List<User> userList = groupUserMap.get(group);
-        if (adminMap.get(group).equals(user)) {
-            throw new IllegalArgumentException("Cannot remove admin");
-        }
-         userList.remove(user);
-
-         return 0;
-
-
-//        for(User users :  senderMap.values()) {
-//            if (users == null) {
-//                throw new IllegalArgumentException("User not found in any group.");
-//            } else {
-//                senderMap.remove(users);
-//
-//            }
+//        Group group = user.getGroup();
+//        if (adminMap.get(group).equals(user)) {
+//            throw new IllegalArgumentException("Cannot remove admin");
 //        }
-//            for (User userss : adminMap.values()) {
-//                if (userss == null) {
-//                    throw new IllegalArgumentException("User not found in any group.");
-//                } else
-//                    senderMap.remove(userss);
-//
-//            }
-//            Collection<List<User>> userList = groupUserMap.values();
-//            if (userList.size() > 2) {
-//                userList.remove(user);
-//            }
-//
-        }
+//        userList.remove(user);
+//        return userList.size();
+//    }
 
-    public  static String findMessage(Date start, Date end, int K) throws Exception{
-        List<Message> messages = new ArrayList<>();
-        for (List<Message> groupMessages : groupMessageMap.values()) {
-            for (Message message : groupMessages) {
-                if (message.getTimestamp().after(start) && message.getTimestamp().before(end)) {
-                    messages.add(message);
-                }
+       for(User users :  senderMap.values()) {
+            if (users == null) {
+               throw new IllegalArgumentException("User not found");
+           } else {
+                senderMap.remove(users);
+
             }
-        }
-        if (messages.size() < K) {
-            throw new Exception("K is greater than the number of messages");
+       }
+            for (User userss : adminMap.values()) {
+               if (userss == null) {
+                   throw new IllegalArgumentException("User not found");
+               } else
+                   senderMap.remove(userss);
+
+            }
+            Collection<List<User>> userList = groupUserMap.values();
+           if (userList.size() > 2) {
+               userList.remove(user);
+           }
+         return userList.size();
         }
 
-        return messages.toString();
+    public  static String findMessage(Date start, Date end, int K) throws Exception{    List<Message> messages = new ArrayList<>();
+       for (List<Message> groupMessages : groupMessageMap.values()) {for (Message message : groupMessages) {
+               if (message.getTimestamp().after(start) && message.getTimestamp().before(end)) {messages.add(message);
+              }
+           }
+       }
+      if (messages.size() < K) {
+          throw new Exception("K is greater than the number of messages");
+       }
+
+      return messages.toString();
     }
 }
