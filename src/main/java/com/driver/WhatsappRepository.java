@@ -9,13 +9,13 @@ public class WhatsappRepository {
 
     //Assume that each user belongs to at most one group
     //You can use the below mentioned hashmaps or delete these and create your own.
-    private static HashMap<Group, List<User>> groupUserMap;
-    private static HashMap<Group, List<Message>> groupMessageMap;
-    private static HashMap<Message, User> senderMap;
-    private static HashMap<Group, User> adminMap;
-    private static HashSet<String> userMobile;
-    private static int customGroupCount;
-    private static int messageId;
+    private HashMap<Group, List<User>> groupUserMap;
+    private HashMap<Group, List<Message>> groupMessageMap;
+    private HashMap<Message, User> senderMap;
+    private HashMap<Group, User> adminMap;
+    private HashSet<String> userMobile;
+    private int customGroupCount;
+    private int messageId;
 
     public WhatsappRepository() {
         this.groupMessageMap = new HashMap<Group, List<Message>>();
@@ -27,7 +27,7 @@ public class WhatsappRepository {
         this.messageId = 0;
     }
 
-    public static String createUser(String name, String mobile) throws Exception {
+    public String createUser(String name, String mobile) throws Exception {
         //User newUser = new User(name, mobile);
         if (userMobile.contains(mobile)) {
             throw new IllegalArgumentException("User already exists");
@@ -38,7 +38,7 @@ public class WhatsappRepository {
         return "SUCCESS";
     }
 
-    public static Group createGroup(List<User> users) {
+    public Group createGroup(List<User> users) {
         if (users.size() < 2) {
             throw new IllegalArgumentException("A group should have at least 2 users.");
         }
@@ -61,14 +61,14 @@ public class WhatsappRepository {
         return group;
     }
 
-    public static int createMessage(String content) {
+    public int createMessage(String content) {
         messageId++;
         Message message = new Message(messageId, content, new Date());
         senderMap.put(message, null);
         return messageId;
     }
 
-    public static int sendMessage(Message message, User sender, Group group) throws Exception {
+    public int sendMessage(Message message, User sender, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
             throw new IllegalArgumentException("Group does not exist.");
         }
@@ -82,7 +82,7 @@ public class WhatsappRepository {
         return messageList.size();
     }
 
-    public static String changeAdmin(User approver, User user, Group group) throws Exception {
+    public String changeAdmin(User approver, User user, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
             throw new IllegalArgumentException("Group does not exist.");
         }
@@ -98,7 +98,7 @@ public class WhatsappRepository {
     }
 
 
-    public static int removeUser(User user) throws Exception {
+    public int removeUser(User user) throws Exception {
         if (user.getName() == null) {
             throw new IllegalArgumentException("User not found");
         }
@@ -132,7 +132,8 @@ public class WhatsappRepository {
          return userList.size();
         }
 
-    public  static String findMessage(Date start, Date end, int K) throws Exception{    List<Message> messages = new ArrayList<>();
+    public  String findMessage(Date start, Date end, int K) throws Exception{
+        List<Message> messages = new ArrayList<>();
        for (List<Message> groupMessages : groupMessageMap.values()) {for (Message message : groupMessages) {
                if (message.getTimestamp().after(start) && message.getTimestamp().before(end)) {messages.add(message);
               }
