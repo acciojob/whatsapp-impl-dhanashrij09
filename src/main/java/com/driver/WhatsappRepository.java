@@ -69,11 +69,11 @@ public class WhatsappRepository {
 
     public int sendMessage(Message message, User sender, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
-            throw new IllegalArgumentException("Group does not exist.");
+            throw new Exception("Group does not exist.");
         }
         List<User> userList = groupUserMap.get(group);
         if (!userList.contains(sender)) {
-            throw new IllegalArgumentException("Sender is not a member of the group.");
+            throw new Exception("Sender is not a member of the group.");
         }
         senderMap.put(message, sender);
         List<Message> messageList = groupMessageMap.get(group);
@@ -83,14 +83,14 @@ public class WhatsappRepository {
 
     public String changeAdmin(User approver, User user, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
-            throw new IllegalArgumentException("Group does not exist.");
+            throw new Exception("Group does not exist.");
         }
         if (!adminMap.get(group).equals(approver)) {
-            throw new IllegalArgumentException("Approver does not have rights");
+            throw new Exception("Approver does not have rights");
         }
         List<User> userList = groupUserMap.get(group);
         if (!userList.contains(user)) {
-            throw new IllegalArgumentException("Approver does not have rights");
+            throw new Exception("Approver does not have rights");
         }
         adminMap.put(group, user);
         return "SUCCESS";
@@ -99,9 +99,9 @@ public class WhatsappRepository {
 
     public int removeUser(User user) throws Exception {
         if (user.getName() == null) {
-            throw new IllegalArgumentException("User not found");
+            throw new Exception("User not found");
         }
-//        Group group = user.getGroup();
+//       Group group = user.getGroup();
 //        if (adminMap.get(group).equals(user)) {
 //            throw new IllegalArgumentException("Cannot remove admin");
 //        }
@@ -111,7 +111,7 @@ public class WhatsappRepository {
 
        for(User users :  senderMap.values()) {
             if (users == null) {
-               throw new IllegalArgumentException("User not found");
+               throw new Exception("User not found");
            } else {
                 senderMap.remove(users);
 
@@ -119,7 +119,7 @@ public class WhatsappRepository {
        }
             for (User userss : adminMap.values()) {
                if (userss == null) {
-                   throw new IllegalArgumentException("User not found");
+                   throw new Exception("User not found");
                } else
                    senderMap.remove(userss);
 
@@ -133,7 +133,8 @@ public class WhatsappRepository {
 
     public  String findMessage(Date start, Date end, int K) throws Exception{
         List<Message> messages = new ArrayList<>();
-       for (List<Message> groupMessages : groupMessageMap.values()) {for (Message message : groupMessages) {
+       for (List<Message> groupMessages : groupMessageMap.values()) {
+           for (Message message : groupMessages) {
                if (message.getTimestamp().after(start) && message.getTimestamp().before(end)) {messages.add(message);
               }
            }
