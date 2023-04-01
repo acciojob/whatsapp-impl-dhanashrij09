@@ -23,12 +23,15 @@ public class WhatsappController {
     WhatsappService whatsappService = new WhatsappService();
 
     @PostMapping("/add-user")
-    public String createUser(String name, String mobile) throws Exception {
+      public ResponseEntity<String> createUser(String name, String mobile) throws Exception {
         //If the mobile number exists in database, throw "User already exists" exception
         //Otherwise, create the user and return "SUCCESS"
 
-        return whatsappService.createUser(name, mobile);
+        whatsappService.createUser(name, mobile);
+        return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
+
     }
+
 
     public Group createGroup(List<User> users){
         // The list contains at least 2 users where the first user is the admin. A group has exactly one admin.

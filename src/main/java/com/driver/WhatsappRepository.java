@@ -27,15 +27,14 @@ public class WhatsappRepository {
         this.messageId = 0;
     }
 
-    public String createUser(String name, String mobile) throws Exception {
+    public void createUser(String name, String mobile) throws Exception {
         //User newUser = new User(name, mobile);
         if (userMobile.contains(mobile)) {
-            throw new IllegalArgumentException("User already exists");
+            throw new Exception("User already exists");
         } else
             userMobile.add(mobile);
         User user = new User(name, mobile);
 
-        return "SUCCESS";
     }
 
     public Group createGroup(List<User> users) {
