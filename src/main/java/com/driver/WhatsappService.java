@@ -1,6 +1,5 @@
 package com.driver;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -13,8 +12,9 @@ public class WhatsappService {
     //WhatsappRepository whatsappRepository;
    WhatsappRepository whatsappRepository = new WhatsappRepository();
 
-    public void createUser(String name,String mobile)  throws Exception {
-         whatsappRepository.createUser(name,mobile);
+    public String createUser(String name, String mobile)  throws Exception {
+        return whatsappRepository.createUser(name,mobile);
+
     }
 
     public Group createGroup(List<User> users){
